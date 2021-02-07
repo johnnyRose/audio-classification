@@ -69,7 +69,7 @@ def parse_audio_files(parent_dir,file_ext='*.ogg'):
                 # labels = np.append(labels, fn.split('/')[1])
                 labels = np.append(labels, label)
             print("extract %s features done" % (sub_dir))
-    return np.array(features), np.array(labels, dtype = np.int)
+    return np.array(features), np.array(labels, dtype = np.int), sub_dirs
 
 def parse_predict_files(parent_dir,file_ext='*.ogg'):
     features = np.empty((0,193))
@@ -84,9 +84,10 @@ def parse_predict_files(parent_dir,file_ext='*.ogg'):
 
 def main():
     # Get features and labels
-    features, labels = parse_audio_files('data')
+    features, labels, label_names = parse_audio_files('data')
     np.save('feat.npy', features)
     np.save('label.npy', labels)
+    np.save('label_names.npy', label_names)
 
     # Predict new
     features, filenames = parse_predict_files('predict')

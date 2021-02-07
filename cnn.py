@@ -30,7 +30,7 @@ def train(args):
         X = np.load('feat.npy')
         y = np.load('label.npy').ravel()
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=233)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=233)
 
     # Count the number of sub-directories in 'data'
     class_count = len(next(os.walk('data/'))[1])
@@ -85,6 +85,7 @@ def real_time_predict(args):
     import sys
     if op.exists(args.model):
         model = keras.models.load_model(args.model)
+        label_names = np.load('label_names.npy')
         while True:
             try:
                 features = np.empty((0,193))
@@ -95,7 +96,7 @@ def real_time_predict(args):
                 features = np.expand_dims(features, axis=2)
                 pred = model.predict_classes(features)
                 for p in pred:
-                    print(p)
+                    print(label_names[p])
                     if args.verbose: print('Time elapsed in real time feature extraction: ', time.time() - start)
                     sys.stdout.flush()
             except KeyboardInterrupt: parser.exit(0)
